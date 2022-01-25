@@ -1,0 +1,127 @@
+---
+title: "第一章"
+output: html_notebook
+---
+
+參考書籍：R語言 量表編制、統計分析與試題反映理論<br>
+資料來源：https://www.wunan.com.tw/bookdetail?NO=13814<br>
+範例檔案：CH01_1.csv<br>
+
+# 一、匯入資料與前處理
+```{r}
+# 引入套件
+library(readr)
+```
+
+```{r}
+# 範例檔案來源
+file_name <- "/DATA/CH01/CH01_1.csv"
+file_sourse <- paste0(getwd(), file_name)
+
+# 原始資料 data0
+data0 <- read.csv(file_sourse, fileEncoding="UCS-2LE")
+head(data0)
+```
+
+```{r}
+# 抓取"德育"的資料
+data0[, 2]
+```
+
+```{r}
+# 將5種資料都儲存到變數內
+moral  <- data0[, 2]
+wisdom <- data0[, 3]
+sport  <- data0[, 4]
+group  <- data0[, 5]
+pretty <- data0[, 6]
+```
+
+# 二、計算個變項的平均數、中位數以及總和。
+```{r}
+# 計算平均數
+cat("平均數\n")
+cat("德育：", mean(moral), "\n")
+cat("智育：", mean(wisdom), "\n")
+cat("體育：", mean(sport), "\n")
+cat("群育：", mean(group), "\n")
+cat("美育：", mean(pretty), "\n")
+```
+
+```{r}
+# 計算中位數
+cat("中位數\n")
+cat("德育：", median(moral), "\n")
+cat("智育：", median(wisdom), "\n")
+cat("體育：", median(sport), "\n")
+cat("群育：", median(group), "\n")
+cat("美育：", median(pretty), "\n")
+```
+
+```{r}
+# 計算總和
+cat("總和\n")
+cat("德育：", sum(moral), "\n")
+cat("智育：", sum(wisdom), "\n")
+cat("體育：", sum(sport), "\n")
+cat("群育：", sum(group), "\n")
+cat("美育：", sum(pretty), "\n")
+```
+
+# 三、分析各變項的全距、變異數、標準差、第1四分位數、第2四分位數、第3四分位數等變異量數。
+```{r}
+# 計算全距
+cat("全距\n")
+cat("德育：", max(moral)-min(moral), "\n")
+cat("智育：", max(wisdom)-min(wisdom), "\n")
+cat("體育：", max(sport)-min(sport), "\n")
+cat("群育：", max(group)-min(group), "\n")
+cat("美育：", max(pretty)-min(pretty), "\n")
+```
+
+```{r}
+# 計算變異數
+cat("變異數\n")
+cat("德育：", var(moral), "\n")
+cat("智育：", var(wisdom), "\n")
+cat("體育：", var(sport), "\n")
+cat("群育：", var(group), "\n")
+cat("美育：", var(pretty), "\n")
+```
+
+```{r}
+# 計算標準差
+cat("標準差\n")
+cat("德育：", sd(moral), "\n")
+cat("智育：", sd(wisdom), "\n")
+cat("體育：", sd(sport), "\n")
+cat("群育：", sd(group), "\n")
+cat("美育：", sd(pretty), "\n")
+```
+
+```{r}
+# 計算第1四分位數、第2四分位數(中位數)、第3四分位數
+summary(data0)
+```
+
+# 四、新增一個 total 變項，此變項為前5個變項的總和，並檢視資料。
+```{r}
+head(data0, 5)
+```
+
+```{r}
+total <- apply(head(data0[c('德育', '智育', '體育', '群育', '美育')], 5), 2, sum)
+print(total)
+```
+
+
+
+
+
+
+
+
+
+
+
+

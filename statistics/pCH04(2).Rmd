@@ -1,0 +1,105 @@
+---
+title: "第四章 平均數差異檢定"
+output: html_notebook
+---
+
+貳、獨立樣本變異數分析<br>
+參考書籍：R語言 量表編制、統計分析與試題反映理論<br>
+資料來源：https://www.wunan.com.tw/bookdetail?NO=13814<br>
+範例檔案：CH04_1.csv<br>
+
+---
+
+# 一、匯入資料與前處理
+```{r}
+# 引入套件
+library(readr)
+```
+
+```{r}
+# 範例檔案來源
+file_name <- "/DATA/CH04/CH04_1.csv"
+file_sourse <- paste0(getwd(), file_name)
+
+# 原始資料 data0
+data0 <- read.csv(file_sourse, fileEncoding="UCS-2LE")
+head(data0)
+```
+```{r}
+# 將 JOB 轉為類別變項
+data0$JOB <- factor(data0$JOB)
+print(data0$JOB)
+```
+
+```{r}
+# 修改工作職務的類別名稱，從1、2、3、4轉換為主任、組長、科任、級任。
+data0$JOB <- factor(data0$JOB, levels=c(1, 2, 3, 4), labels=c("主任", "組長", "科任", "級任"))
+print(head(data0$JOB))
+```
+
+# 二、計算分量表變項總分
+```{r}
+# 計算4個分量表的總分，即加總
+data0$A01 <- apply(data0[4:9], 1, sum)
+data0$A02 <- apply(data0[10:15], 1, sum)
+data0$A03 <- apply(data0[16:19], 1, sum)
+data0$A04 <- apply(data0[20:22], 1, sum)
+data0$A00 <- apply(data0[4:22], 1, sum)
+
+# 計算單題平均數，從上述總分轉為計算其平均數
+data0$SA01 <- apply(data0[4:9], 1, mean)
+data0$SA02 <- apply(data0[10:15], 1, mean)
+data0$SA03 <- apply(data0[16:19], 1, mean)
+data0$SA04 <- apply(data0[20:22], 1, mean)
+data0$SA00 <- apply(data0[4:22], 1, mean)
+
+head(data0)
+```
+# 三、進行變異數分析
+```{r}
+# 匯入套件，用來檢視樣本
+#install.packages("Rmisc")
+library(Rmisc)
+```
+
+```{r}
+# 單因子變異數分析
+# 1.列出樣本摘要
+summarySE(data=data0, groupvars="JOB", measurevar="SA01")
+```
+
+```{r}
+# 匯入套件，用來檢定變異數同質
+# install.packages("DescTools")
+library(DescTools)
+```
+
+```{r}
+# 2.變異數同質性檢定
+LeveneTest(SA01~JOB, data=data0, center=mean)
+```
+
+```{r}
+# 3.變異數分析(摘要表)
+mjob <- aov(SA01~JOB, data=data0)
+anova(mjob)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
